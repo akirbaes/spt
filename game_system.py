@@ -101,20 +101,20 @@ class game_map:
 		return True
 
 	def show(self):
-		print ""
-		print self.name	
+		print("")
+		print(self.name)
 		for i,line in enumerate(self.level):
 			for j,element in enumerate(line):
-				print str(element),
+				print(str(element),)
 			print()
 		print()
 
 	def show_level(self):
-		print ""
-		print self.name	
+		print("")
+		print(self.name)
 		for i,line in enumerate(self.data):
 			for j,element in enumerate(line):
-				print str(element),
+				print(str(element),)
 			print()
 		print()
 
@@ -178,7 +178,7 @@ class game_map:
 			anim.damagecontrol=dc"""
 		index=0		
 		while(index<len(self.animslist)):
-			if(not self.animslist[index].next()):
+			if(not next(self.animslist[index])):
 				self.animslist.pop(index)
 			else:
 				index+=1

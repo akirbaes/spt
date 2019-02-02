@@ -169,7 +169,7 @@ def endlevel(screen,horizontal_position,vertical_position,direction):
 			animlist=[turn(screen,k,yy,((k%2)*2-1)*switch) for k in range(11) if pres[k] == True]"""
 		index=0
 		while index<len(animlist):
-			if(not animlist[index].next()):
+			if(not next(animlist[index])):
 				animlist.pop(index)
 			else:
 				index+=1
@@ -284,7 +284,7 @@ if __name__=="__main__":
 		
 		index=0		
 		while(index<len(animslist)):
-			if(not animslist[index].next()):
+			if(not next(animslist[index])):
 				animslist.pop(index)
 			else:
 				index+=1
