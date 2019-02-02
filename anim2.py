@@ -1,4 +1,4 @@
-from spt import gx,gy,gw,gh,ww,wh,ts,second,h,half,q,quarter,e, eighth
+from constants import gx,gy,gw,gh,ww,wh,ts,second,h,half,q,quarter,e, eighth
 
 from sprites_load import *
 #from sprites_load import chartable
@@ -14,12 +14,8 @@ def reset():
 	walkcycle,turnip = reload_character()
 	#print("reseted")
 
-class damagecontrol:
-	value=True
-	def __eq__(self,other):
-		return self.value==other
-	def __nonzero__(self):
-		return bool(self.value)
+damagecontrol=True
+
 
 def animation(screen,horizontal_position,vertical_position,direction):
 	pd=direction
@@ -28,7 +24,7 @@ def animation(screen,horizontal_position,vertical_position,direction):
 	ndir=not round((direction+1)/2) #right : 0, left : 1
 	anim=1
 	for step in range(half):
-		if(damagecontrol()):
+		if(damagecontrol):
 			screen.blit(walkcycle[ndir][int(anim%3)], (x,y))
 		yield True
 	yield False
@@ -41,7 +37,7 @@ def forward(screen,horizontal_position,vertical_position,direction):
 	ndir=not round((direction+1)/2) #right : 0, left : 1
 
 	for step in range(half):
-		if damagecontrol(): #damaged : visible or not
+		if damagecontrol: #damaged : visible or not
 			if(step<=q):
 				k=float(step)/q 
 				x=x0+pd*k*ts #slide toward x1
@@ -60,7 +56,7 @@ def jump_up(screen,horizontal_position,vertical_position,direction):
 	ndir=not round((direction+1)/2) #right : 0, left : 1
 	anim=1
 	for step in range(half):
-		if damagecontrol():
+		if damagecontrol:
 			if(step<q):
 				k=float(step)/q
 				x=x0+pd*k*ts
@@ -81,7 +77,7 @@ def jump_down(screen,horizontal_position,vertical_position,direction):
 	ndir=not round((direction+1)/2) #right : 0, left : 1
 	anim=1
 	for step in range(half):
-		if damagecontrol():
+		if damagecontrol:
 			if(step<q):
 				k=float(step)/q
 				x=x0+direction*k*ts
@@ -103,7 +99,7 @@ def turn(screen,horizontal_position,vertical_position,direction):
 	ndir=not round((direction+1)/2) #right : 0, left : 1
 	anim=1
 	for step in range(half):
-		if damagecontrol():
+		if damagecontrol:
 			if(step<q):
 				y=y1-(ts/4.0)*(1-((float(step-e)/e)**2))
 			else:

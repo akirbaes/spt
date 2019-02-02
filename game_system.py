@@ -1,7 +1,7 @@
 import os
 import pygame
 from copy import deepcopy
-from anim2 import *
+import anim2 as anim
 from constants import *
 from sprites_load import *
 
@@ -49,7 +49,7 @@ class game_map:
 	def r(self):
 		global chartable, turnip
 		chartable,turnip=reload_character()
-		reset()
+		anim.reset()
 			
 
 	def put_jumper(self,up=True,curtain=7):
@@ -172,7 +172,7 @@ class game_map:
 		"""
 		if not anim.damagecontrol:
 			print("Damage control set to",anim.damagecontrol)"""
-		damagecontrol.value=dc
+		anim.damagecontrol=dc
 		"""
 		for anim in self.animslist:
 			anim.damagecontrol=dc"""
@@ -227,23 +227,23 @@ class game_map:
 		#print self.px,self.py,
 		l=self.level
 		if(self.life==0):
-				self.animslist.append(diet(self.screen,self.px,self.py,self.pd,half))		
+				self.animslist.append(anim.diet(self.screen,self.px,self.py,self.pd,half))		
 				self.level_end=True
 		elif self.endofline(): #next step is end of line
 			#TODO turnanimation
 			#self.animations.append(turnanimation(self.px,self.py,self.pd))
-			self.animslist.append(turn(self.screen,self.px,self.py,self.pd))
+			self.animslist.append(anim.turn(self.screen,self.px,self.py,self.pd))
 			self.pd=-self.pd
 		elif self.next_collision("B"): #block
 
 			self.px+=self.pd
 			if(self.can_step):
-				self.animslist.append(forward(self.screen,self.px,self.py,self.pd))
+				self.animslist.append(anim.forward(self.screen,self.px,self.py,self.pd))
 			self.life-=1
 			if(self.life>0): #following interpretatino, >0 or >=0
 				#print "DAMAGE!"
 				self.score-=1
-				self.animslist.append(crush(self.screen,self.px,self.py,-(not self.can_step)*quarter))
+				self.animslist.append(anim.crush(self.screen,self.px,self.py,-(not self.can_step)*quarter))
 				#TODO damageanimation
 				#self.animations.append(damageanimation(self.px,self.py,self.pd)
 				l[self.py][self.px]="0"	#remove the wall marker
@@ -251,7 +251,7 @@ class game_map:
 			else:
 				#print "DEAD!"
 				self.score-=5
-				self.animslist.append(diet(self.screen,self.px,self.py,self.pd))
+				self.animslist.append(anim.diet(self.screen,self.px,self.py,self.pd))
 				#TODO deadanimation
 				#self.animations.append(deadanimation(self.px,self.py,self.pd)				
 				self.level_end=True
@@ -261,8 +261,8 @@ class game_map:
 			self.score+=2
 			self.px+=self.pd
 			if(self.can_step):
-				self.animslist.append(forward(self.screen,self.px,self.py,self.pd))
-			self.animslist.append(bonus(self.screen,self.px,self.py,-(not self.can_step)*quarter))
+				self.animslist.append(anim.forward(self.screen,self.px,self.py,self.pd))
+			self.animslist.append(anim.bonus(self.screen,self.px,self.py,-(not self.can_step)*quarter))
 			l[self.py][self.px]="0"
 			self.life=min(self.life+1,3) #3 is max, gotta write this one down
 			#TODO bonusanimation
@@ -271,7 +271,7 @@ class game_map:
 			if(self.can_step):
 				if(self.py==0):
 					self.px+=self.pd
-					self.animslist.append(forward(self.screen,self.px,self.py,self.pd))
+					self.animslist.append(anim.forward(self.screen,self.px,self.py,self.pd))
 					#TODO up edge animation
 					#up edge sound bump
 					pass
@@ -280,7 +280,7 @@ class game_map:
 					self.py-=1
 					self.can_step=False
 
-					self.animslist.append(jump_up(self.screen,self.px+self.pd,self.py,self.pd))
+					self.animslist.append(anim.jump_up(self.screen,self.px+self.pd,self.py,self.pd))
 					self.step()
 					self.can_step=True
 			else:
@@ -293,8 +293,8 @@ class game_map:
 					self.level_end=True
 					#print "* >>WIN<< *"
 					self.py+=1					
-					self.animslist.append(jump_down(self.screen,self.px+self.pd,self.py,self.pd))
-					self.animslist.append(endlevel(self.screen,self.px+self.pd,self.py,self.pd))
+					self.animslist.append(anim.jump_down(self.screen,self.px+self.pd,self.py,self.pd))
+					self.animslist.append(anim.endlevel(self.screen,self.px+self.pd,self.py,self.pd))
 					self.score+=self.life*3
 					self.score+=self.jumpers
 					#TODO win animation
@@ -303,7 +303,7 @@ class game_map:
 					#print "JUMP DOWN"
 
 					self.py+=1
-					self.animslist.append(jump_down(self.screen,self.px+self.pd,self.py,self.pd))
+					self.animslist.append(anim.jump_down(self.screen,self.px+self.pd,self.py,self.pd))
 					self.can_step=False
 					self.step()
 					self.can_step=True
@@ -319,7 +319,7 @@ class game_map:
 		else:
 			self.px+=self.pd
 			if(self.can_step):
-				self.animslist.append(forward(self.screen,self.px,self.py,self.pd))
+				self.animslist.append(anim.forward(self.screen,self.px,self.py,self.pd))
 		#print ""
 
 	#def draw(self,screen):
