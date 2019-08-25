@@ -25,15 +25,18 @@ boostdown=pygame.transform.flip(boostup,False,True)
 boostingsurf= pygame.image.load(os.path.join('graphics', 'boosting.png'))
 #boostingsurf.convert_alpha(screen)
 heartsurf= pygame.image.load(os.path.join("graphics", "heart.png"))
+emptyheartsurf= pygame.image.load(os.path.join("graphics", "heart_empty.png"))
 #heartsurf.convert_alpha(screen)
-lifevial=pygame.image.load(os.path.join("graphics","bonus.png"))
+lifevial=pygame.image.load(os.path.join("graphics","bonus_carrot.png"))
 #lifevial.convert_alpha(screen)
 starsurf=pygame.image.load(os.path.join("graphics", "star.png"))
 #starsurf.convert_alpha(screen)
 infinity=pygame.image.load(os.path.join("graphics", "infinity.png"))
 #infinity.convert_alpha(screen)
-boostnote=pygame.image.load(os.path.join("graphics", "boostnote.png"))
+boostnote=pygame.image.load(os.path.join("graphics", "boost_icon.png"))
 #boostnote.convert_alpha(screen)
+boost_socket=pygame.image.load(os.path.join("graphics", "boost_socket.png"))
+boost_icon=pygame.image.load(os.path.join("graphics", "boost_icon.png"))
 
 marker=pygame.image.load(os.path.join("graphics","marker.png"))
 #marker.convert_alpha(screen)
@@ -42,9 +45,11 @@ leveltitle=myfont.render("Level :", False, (255,255,255))
 scoretitle=myfont.render("Score :", False, (255,255,255))
 boosttitle=font2.render("Boost",False,(255,255,255))
 
-gradtile=pygame.Surface((ts,ts))
-for i in range(ts):
-	pygame.draw.line(gradtile, (128-i*128/ts,128-i*128/ts,128-i*128/ts), (0,i),(ts,i))
+gradtile=pygame.Surface((ts,ts), pygame.SRCALPHA)
+for j in range(ts):
+	for i in range(ts):
+		gradtile.set_at((i,j),(0,0,0,(j/ts)**1.5*260*(j%2)*(i%2)))
+		#pygame.draw.line(gradtile, (0,0,0,128-i*128/ts), (0,i),(ts,i))
 
 def reload_character():
 	datafile=open(os.path.join("levels","level0.rawdata"))

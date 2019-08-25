@@ -181,10 +181,11 @@ def puzzle_loop(screen,clock):
 							mode="Puzzle"
 							loader._load(puzzle_list[current-1])
 							loader.init_level()
-							loader.jumpers=-1
+							loader.jumpers=-1 #for the initial frame
 							step=0
 		elif mode=="Puzzle":
 			loader.draw(screen)
+			loader.jumpers=-1
 			loader.life=3
 			screen.blit(quitmessage,(0,0))
 			screen.blit(startmessage,(0,ts/2))

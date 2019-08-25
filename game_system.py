@@ -148,11 +148,10 @@ class game_map:
 					color=(0,0,0)
 					pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
 				else:
-					color=tuple(a*(j+1)/12 for a in colors[i]) 
+					color=tuple(a*(j+3)/14 for a in colors[i]) 
+					pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
 					if(i==6):
 						screen.blit(gradtile, (gx+j*ts, gy+i*ts))
-					else:
-						pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
 				if(data[i][j]=="D"):
 					screen.blit(boostdown, (gx+j*ts, gy+i*ts))
 				elif(data[i][j]=="U"):
@@ -200,14 +199,21 @@ class game_map:
 		#pygame.draw.rect(screen, (0,0,0), ((0,gy+ts*2.5),(ts*1.5,gy+gh)))
 
 		if(self.show):
-			if(self.jumpers>0):
-				for i in range(self.jumpers):
-					screen.blit(boostnote,(ts/2,wh+i*ts*1.5-5*ts))
+			if(self.jumpers>=0):
+				for i in range(3):
+					if(i<self.jumpers):
+						screen.blit(boostnote,(ts/2,wh+i*ts*1-5.5*ts))
+					else:
+						screen.blit(boost_socket,(ts/2,wh+i*ts*1-5.5*ts))
+						
 			elif(self.jumpers==-1):
 				screen.blit(infinity,(ts/2,wh-5.5*ts))
 
-			for v in range(self.life):
-				screen.blit(heartsurf, (ts*v,ts))
+			for v in range(3):
+				if(v<self.life):
+					screen.blit(heartsurf, (ts*v,ts))
+				else:
+					screen.blit(emptyheartsurf, (ts*v,ts))
 			screen.blit(leveltitle,(ww/2,0))
 			screen.blit(scoretitle,(ww/2,ts))
 			screen.blit(boosttitle,(ts/2,4*ts))
