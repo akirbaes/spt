@@ -144,16 +144,21 @@ class game_map:
 		#screen.blit(cbnasurf, (0,0))
 		for i in range(7):
 			for j in range(11):
+				color=tuple(a*(j+3)/14 for a in colors[i]) 
+				pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
+				
 				if(data[i][j]=="B"):
-					color=(0,0,0)
-					pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
-				else:
-					color=tuple(a*(j+3)/14 for a in colors[i]) 
-					pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
-					if(i==6):
-						screen.blit(gradtile, (gx+j*ts, gy+i*ts))
-				if(data[i][j]=="D"):
+					#color=(0,0,0)
+					#pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
+					screen.blit(wall, (gx+j*ts, gy+i*ts))
+				if(i==6):
+					screen.blit(gradtile, (gx+j*ts, gy+i*ts))
+				if(self.data[i][j]=="D"):
+					screen.blit(natural_boostdown, (gx+j*ts, gy+i*ts))
+				elif(data[i][j]=="D"):
 					screen.blit(boostdown, (gx+j*ts, gy+i*ts))
+				elif(self.data[i][j]=="U"):
+					screen.blit(natural_boostup, (gx+j*ts, gy+i*ts))
 				elif(data[i][j]=="U"):
 					screen.blit(boostup, (gx+j*ts, gy+i*ts))
 				elif(data[i][j]=="V"):

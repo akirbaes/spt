@@ -20,11 +20,11 @@ def menu_loop(screen,clock):
 	#print("Is this it?")
 	loader.r()
 	step=0
-	title="7 floors + 3 things"
+	title="Ups and downs"
 	title=myfont.render(title,False,(255,255,255))
 	mark=pygame.image.load(os.path.join("graphics","marker.png"))
 	mark=pygame.transform.flip(mark,True,False)
-	names="Tutorial","Play","Quit","Characters"
+	names="Tutorial","Rush mode","Quit","Characters"
 	secret=myfont.render("Puzzle",False,(255,255,255))
 	messages=[myfont.render(txt,False,(255,255,255)) for txt in names]
 	while not quit and not game:

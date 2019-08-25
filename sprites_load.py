@@ -22,6 +22,9 @@ cbnasurf = pygame.image.load(os.path.join('graphics', 'cbna.png'))
 boostup =  pygame.image.load(os.path.join('graphics', 'boostup.png'))
 #boostup.convert_alpha(screen)
 boostdown=pygame.transform.flip(boostup,False,True)
+natural_boostup =  pygame.image.load(os.path.join('graphics', 'natural_boostup.png'))
+#boostup.convert_alpha(screen)
+natural_boostdown=pygame.transform.flip(natural_boostup,False,True)
 boostingsurf= pygame.image.load(os.path.join('graphics', 'boosting.png'))
 #boostingsurf.convert_alpha(screen)
 heartsurf= pygame.image.load(os.path.join("graphics", "heart.png"))
@@ -38,6 +41,8 @@ boostnote=pygame.image.load(os.path.join("graphics", "boost_icon.png"))
 boost_socket=pygame.image.load(os.path.join("graphics", "boost_socket.png"))
 boost_icon=pygame.image.load(os.path.join("graphics", "boost_icon.png"))
 
+wall=pygame.image.load(os.path.join("graphics", "wall.png"))
+
 marker=pygame.image.load(os.path.join("graphics","marker.png"))
 #marker.convert_alpha(screen)
 #from spt import FONTSIZE,myfont,font2
@@ -49,6 +54,8 @@ gradtile=pygame.Surface((ts,ts), pygame.SRCALPHA)
 for j in range(ts):
 	for i in range(ts):
 		gradtile.set_at((i,j),(0,0,0,(j/ts)**1.5*260*(j%2)*(i%2)))
+		if not(j%2 or i%2):
+			gradtile.set_at((i,j),(255,255,255,(j/ts)**4*200))
 		#pygame.draw.line(gradtile, (0,0,0,128-i*128/ts), (0,i),(ts,i))
 
 def reload_character():
