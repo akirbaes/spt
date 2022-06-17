@@ -1,6 +1,6 @@
 import pygame
 import os
-from constants import myfont, font2,ts
+from constants import myfont, font2, ts, ANTIALIAS
 
 chartable=list()	
 canim=tuple()
@@ -45,11 +45,13 @@ wall=pygame.image.load(os.path.join("graphics", "cr.png"))
 cadre = pygame.image.load(os.path.join("graphics", "cadre.png"))
 
 marker=pygame.image.load(os.path.join("graphics","marker.png"))
+timer=pygame.image.load(os.path.join("graphics","timer.png"))
+vial=pygame.image.load(os.path.join("graphics","heart_vial.png"))
 #marker.convert_alpha(screen)
 #from spt import FONTSIZE,myfont,font2
-leveltitle=myfont.render("Level :", False, (255,255,255))
-scoretitle=myfont.render("Score :", False, (255,255,255))
-boosttitle=font2.render("Boost",False,(255,255,255))
+leveltitle=myfont.render("Level :", ANTIALIAS, (255,255,255))
+scoretitle=myfont.render("Score :", ANTIALIAS, (255,255,255))
+boosttitle=font2.render("Boost",ANTIALIAS,(255,255,255))
 
 gradtile=pygame.Surface((ts,ts), pygame.SRCALPHA)
 for j in range(ts):
