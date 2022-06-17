@@ -39,6 +39,8 @@ class game_map:
 		self.level_name=None
 		self.score=0
 		self.init_level()
+
+		self.cursor = None
 		#print("data[0][0] to data[%s][%s]"%(len(self.data),len(self.data[0])))
 	def has_lost(self):	
 		return self.level_end and self.life<=0
