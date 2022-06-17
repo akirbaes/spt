@@ -29,7 +29,7 @@ def menu_loop(screen,clock):
 	messages=[myfont.render(txt,False,(255,255,255)) for txt in names]
 	while not quit and not game:
 		loader.draw(screen)
-		screen.blit(mark,(gx,current*ts+gy+4*ts))
+		screen.blit(mark,(gx-8,current*ts+gy+4*ts-8))
 		screen.blit(title,(ts*2.5,ts/2*1.8))
 		if(unlocked):
 			screen.blit(secret,(gx+ts,gy+3*ts))
@@ -160,10 +160,10 @@ def puzzle_loop(screen,clock):
 			screen.blit(back,(ts/2,ts*2))
 			for i,msg in enumerate(names):
 				screen.blit(msg,(ts*4,ts/2+i*ts-current*8))
-			for i,star in enumerate(completion):
+			for j,star in enumerate(completion):
 				if star:
-					screen.blit(starsurf,(ts*3,ts*3+i*ts-current*8))
-			screen.blit(mark,(ts*2.5,ts/3+current*ts-current*8))
+					screen.blit(starsurf,(ts*3,ts/3+j*ts-current*8))
+			screen.blit(mark,(ts*2,ts/3+current*ts-current*8))
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					quit=True
@@ -227,7 +227,7 @@ def puzzle_loop(screen,clock):
 						mode="Puzzle"
 						step=0
 					else:
-						completion[current-1]=True
+						completion[current]=True
 						mode="Menu"
 			else:
 				if(step%half==0):
