@@ -270,14 +270,14 @@ def tutorial_loop(screen,clock):
 		move=move_mouse_in(mx,my,gx+x*ts+ts/2,gy+y*ts+ts/2,int((timer-0.5)*second))
 		up,down=up,not up
 		for i in range(int((timer-0.5)*second)):
-			yield move.next(), 0, 0
+			yield move.__next__(), 0, 0
 		for i in range(int(second/2)):
-			yield move.next(), up, down
+			yield move.__next__(), up, down
 			if i==int(second/4):
 				loader.put(x,y,up)
 				loader.jumpers-=1
 		while True:
-			yield move.next(), 0,0
+			yield move.__next__(), 0,0
 	quit=False
 	loader=game_loader.game_map(1,screen)
 	loader._load("tutorial")
@@ -307,13 +307,13 @@ def tutorial_loop(screen,clock):
 			pygame.draw.rect(screen, (0,0,0), ((gx,gy+ts*decal),(gx+gw,gy+gh)))
 			if(step==1*second):
 				message=myfont.render(\
-				"Press UP or DOWN to put a jumper tile",False,(255,255,255))
+				"Press UP/DOWN to put a JUMP TILE",False,(255,255,255))
 			if(step<3.5*second):
-				(mx,my),uparrow,downarrow=action.next()
+				(mx,my),uparrow,downarrow=action.__next__()
 			if(step==4*second):
 				action=put_a_tile(8,1,mx,my,False,1)
 			if(4*second<step<second*5.5):
-				(mx,my),uparrow,downarrow=action.next()
+				(mx,my),uparrow,downarrow=action.__next__()
 			step+=1
 			if(step==6*second):
 				act=1
@@ -323,9 +323,9 @@ def tutorial_loop(screen,clock):
 		if(act==1):			
 			if(step==half*4):
 				message=myfont.render(\
-				"You need one square of space to jump!",False,(255,255,255))
+				"You can't JUMP twice in a row!",False,(255,255,255))
 			if(step<half*12):
-				mx,my=action.next()
+				mx,my=action.__next__()
 				if(step%half==0):
 					loader.step()						
 				step+=1
@@ -339,10 +339,10 @@ def tutorial_loop(screen,clock):
 				action=put_a_tile(0,2,mx,my,False,2)
 			if(step==half):
 				message=myfont.render(\
-				"Avoid BLOCKS, heal with HEART VIALS",False,(255,255,255)) #collect life vials
-			if(step==second*5):
+				"Avoid coliding with BLOCKS",False,(255,255,255)) #collect life vials
+			if(step==second*10):
 				message=myfont.render(\
-				"Each NEW floor grants you ONE jumper",False,(255,255,255))
+				"You have limited JUMP TILES during play",False,(255,255,255))
 			if(step==second*2):
 				action=put_a_tile(2,3,mx,my,False,1)
 			if(step==second*4):
@@ -356,16 +356,16 @@ def tutorial_loop(screen,clock):
 				action=move_mouse_in(mx,my,mx*2,my-ts,second)
 			if(step==second*9):
 				decal=7
-			if(step==second*11):
-				message=myfont.render(\
-				"Limited jumpers? But don't worry!",False,(255,255,255))
 			if(step==second*14):
 				message=myfont.render(\
-				"During the [7+3] second the level reveals",False,(255,255,255))
+				"But before the LEVEL STARTS",False,(255,255,255))
 			if(step==second*18):
 				message=myfont.render(\
-				"You will have UNLIMITED jumper tiles!",False,(255,255,255))
+				"you will have INFINITE TILES",False,(255,255,255))
 				loader.jumpers=-1
+			#if(step==second*18):
+			#	message=myfont.render(\
+			#	"You will have UNLIMITED jumper tiles!",False,(255,255,255))
 			if(step==second*22):
 				message=myfont.render(\
 				"If you ever get stuck, press R",False,(255,255,255))
@@ -373,8 +373,8 @@ def tutorial_loop(screen,clock):
 			if(step%half==0):
 				loader.step()
 			if(step<8.5*second):
-				data=action.next()
-			data=action.next()
+				data=action.__next__()
+			data=action.__next__()
 			if(len(data)==3):
 				(mx,my),uparrow,downarrow=data
 			else:
@@ -397,13 +397,15 @@ def tutorial_loop(screen,clock):
 				"of the 7 floors to pass a level",False,(255,255,255))
 			if(step==second*11):
 				message=myfont.render(\
-				"You have 7 continues and 3 lives",False,(255,255,255))
+				"Good luck!",False,(255,255,255))
+				#message=myfont.render(\
+				#"You have 7 continues and 3 lives",False,(255,255,255))
 				loader.life=3
 				loader.continues=7
 			if(step==second*15):
 				message=myfont.render(\
 				"Good luck!",False,(255,255,255))
-			if(step==second*20):
+			if(step==second*16):
 				done=True
 			step+=1
 		pygame.draw.rect(screen, (0,0,0), ((gx,gy+ts*decal),(gx+gw,gy+gh)))
