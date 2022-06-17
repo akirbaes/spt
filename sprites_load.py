@@ -19,10 +19,10 @@ turnip=tuple() #0 : droite. #1 : gauche
 cbnasurf = pygame.image.load(os.path.join('graphics', 'cbna.png'))
 #cbnasurf.convert(screen)
 
-boostup =  pygame.image.load(os.path.join('graphics', 'bup_bon.png'))
+boostup =  pygame.image.load(os.path.join('graphics', 'boostup.png'))
 #boostup.convert_alpha(screen)
 boostdown=pygame.transform.flip(boostup,False,True)
-natural_boostup =  pygame.image.load(os.path.join('graphics', 'bup_natural.png'))
+natural_boostup =  pygame.image.load(os.path.join('graphics', 'boostup_nat.png'))
 #boostup.convert_alpha(screen)
 natural_boostdown=pygame.transform.flip(natural_boostup,False,True)
 boostingsurf= pygame.image.load(os.path.join('graphics', 'bselect1b.png'))
@@ -41,7 +41,8 @@ boostnote=pygame.image.load(os.path.join("graphics", "boost_icon.png"))
 boost_socket=pygame.image.load(os.path.join("graphics", "boost_socket.png"))
 boost_icon=pygame.image.load(os.path.join("graphics", "boost_icon.png"))
 
-wall=pygame.image.load(os.path.join("graphics", "wall.png"))
+wall=pygame.image.load(os.path.join("graphics", "cr.png"))
+cadre = pygame.image.load(os.path.join("graphics", "cadre.png"))
 
 marker=pygame.image.load(os.path.join("graphics","marker.png"))
 #marker.convert_alpha(screen)

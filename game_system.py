@@ -144,9 +144,15 @@ class game_map:
 		#screen.blit(cbnasurf, (0,0))
 		for i in range(7):
 			for j in range(11):
-				color=tuple(a*(j+3)/14 for a in colors[i]) 
+				jj=6-(i+j)%2*2
+				colors=( (255,0,0),(255,255,0),(0,255,0),(0,255,255),(0,0,255),(255,0,255),(128,128,0) )
+				color=tuple(a*(jj+3)/14 for a in colors[i])
+				grey=((128,128,128),(100,100,100))[(i+j)%2]
+				if(i>=self.maxdepth and not self.level_end):
+					color=grey
 				pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
-				
+				screen.blit(cadre, (gx+j*ts, gy+i*ts))
+
 				if(data[i][j]=="B"):
 					#color=(0,0,0)
 					#pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
