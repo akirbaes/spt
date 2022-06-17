@@ -3,6 +3,8 @@ import pygame
 import os
 import game_system as game_loader
 from constants import *
+from sprites_load import lifevial, timer, vial
+
 unlocked=True
 
 
@@ -21,12 +23,12 @@ def menu_loop(screen,clock):
 	loader.r()
 	step=0
 	title="Ups and downs"
-	title=myfont.render(title,False,(255,255,255))
+	title=myfont.render(title,ANTIALIAS,(255,255,255))
 	mark=pygame.image.load(os.path.join("graphics","marker.png"))
 	mark=pygame.transform.flip(mark,True,False)
 	names="Tutorial","Rush mode","Quit","Characters"
-	secret=myfont.render("Puzzle",False,(255,255,255))
-	messages=[myfont.render(txt,False,(255,255,255)) for txt in names]
+	secret=myfont.render("Puzzle",ANTIALIAS,(255,255,255))
+	messages=[myfont.render(txt,ANTIALIAS,(255,255,255)) for txt in names]
 	while not quit and not game:
 		loader.draw(screen)
 		screen.blit(mark,(gx-8,current*ts+gy+4*ts-8))
@@ -63,7 +65,7 @@ def menu_loop(screen,clock):
 
 def game_over_loop(screen,clock):
 	screen.fill((0,0,0))
-	screen.blit(myfont.render("Game Over",False,(255,255,255)),(gw/2,gh-gy))
+	screen.blit(myfont.render("Game Over",ANTIALIAS,(255,255,255)),(gw/2,gh-gy))
 	
 	pygame.display.flip()
 	for i in range(second*6):
@@ -73,9 +75,9 @@ def game_win_loop(screen,clock):
 	global unlocked
 	unlocked=True
 	screen.fill((0,0,0))
-	screen.blit(myfont.render("You win!",False,(255,255,255)),(gw/2,gh-gy))
-	screen.blit(myfont.render("You unlocked a secret character..!",False,(255,255,255)),(gx/2,gh-gy+ts))
-	screen.blit(myfont.render("(Change it in the character menu)",False,(255,255,255)),(gx/2,gh-gy+ts*2))
+	screen.blit(myfont.render("You win!",ANTIALIAS,(255,255,255)),(gw/2,gh-gy))
+	screen.blit(myfont.render("You unlocked a secret character..!",ANTIALIAS,(255,255,255)),(gx/2,gh-gy+ts))
+	screen.blit(myfont.render("(Change it in the character menu)",ANTIALIAS,(255,255,255)),(gx/2,gh-gy+ts*2))
 	#screen.blit(myfont.render("You unlocked puzzle mode!",False,(255,255,255)),(gx/2,gh-gy+ts))
 	sf(lf()|1)
 	"""
@@ -98,15 +100,15 @@ def character_loop(screen,clock):
 	MAXCHOICE=2
 	for i in range(MAXCHOICE):
 		screen.blit(
-		myfont.render(cc[i],False,(255,255,255)), (gx,gy+i*ts))
+		myfont.render(cc[i],ANTIALIAS,(255,255,255)), (gx,gy+i*ts))
 		if(i!=0 and fat!=1):
 			msg="???"
 		else:
 			msg=cn[i]
 		screen.blit(
-		myfont.render(msg,False,(255,255,255)), (gx+gw-ts*3,gy+i*ts))
-	fsurf=myfont.render(">",False,(255,255,255))
-	screen.blit(myfont.render("Back",False,(255,255,255)),((gx,gy+ts*MAXCHOICE)))
+		myfont.render(msg,ANTIALIAS,(255,255,255)), (gx+gw-ts*3,gy+i*ts))
+	fsurf=myfont.render(">",ANTIALIAS,(255,255,255))
+	screen.blit(myfont.render("Back",ANTIALIAS,(255,255,255)),((gx,gy+ts*MAXCHOICE)))
 	cursor=current
 	while not quit and not ret:
 		pygame.draw.rect(screen,(0,0,0),((0,0),(gx,wh)))
@@ -132,7 +134,7 @@ def character_loop(screen,clock):
 							current=cursor
 				elif event.key == pygame.K_q or event.key==pygame.K_LEFT or event.key == pygame.K_ESCAPE :
 					ret=True
-		screen.blit(font2.render("Current character : "+cn[current],False,(255,255,255)),(ts/2,ts/2))
+		screen.blit(font2.render("Current character : "+cn[current],ANTIALIAS,(255,255,255)),(ts/2,ts/2))
 		pygame.display.flip()
 		clock.tick(60)
 	return quit
@@ -148,11 +150,11 @@ def puzzle_loop(screen,clock):
 	mark=pygame.image.load(os.path.join("graphics","marker.png"))
 	mark=pygame.transform.flip(mark,True,False)
 
-	back = myfont.render("Back",False,(255,255,255))
+	back = myfont.render("Back",ANTIALIAS,(255,255,255))
 	names=[x.capitalize() for x in puzzle_list]
-	names=[myfont.render(msg,False,(255,255,255)) for msg in names]
-	quitmessage=font2.render("Press Q/ESC to return",False,(255,255,255))
-	startmessage=font2.render("Press SPACE to start",False,(255,255,255))
+	names=[myfont.render(msg,ANTIALIAS,(255,255,255)) for msg in names]
+	quitmessage=font2.render("Press Q/ESC to return      Press R to reset",ANTIALIAS,(255,255,255))
+	startmessage=font2.render("Press SPACE to start      ",ANTIALIAS,(255,255,255))
 	step=0
 	while not quit and not game:
 		if mode=="Menu":
@@ -160,6 +162,8 @@ def puzzle_loop(screen,clock):
 			screen.blit(back,(ts/2,ts*2))
 			for i,msg in enumerate(names):
 				screen.blit(msg,(ts*4,ts/2+i*ts-current*8))
+				screen.blit(timer,(ts*9,ts/3+i*ts-current*8))
+				screen.blit(vial,(ts*10,ts/3+i*ts-current*8))
 			for j,star in enumerate(completion):
 				if star:
 					screen.blit(starsurf,(ts*3,ts/3+j*ts-current*8))
@@ -287,7 +291,7 @@ def tutorial_loop(screen,clock):
 	loader.jumpers=2
 	step=0
 	act=0
-	skip=font2.render("Press ESC or any key to skip",False,(255,255,255))
+	skip=font2.render("Press ESC or any key to skip",ANTIALIAS,(255,255,255))
 	mouse=pygame.image.load(os.path.join("graphics","mouse.png"))
 	keyup,keydown=(tuple( \
 		pygame.image.load(os.path.join("graphics",name+str(i)+".png")) \
@@ -296,7 +300,7 @@ def tutorial_loop(screen,clock):
 	mx,my=-ts,gy+ts*4
 	#xp,yp=mx,my
 	#xs,ys=gx+ts*8.5,gy+ts/2
-	message=myfont.render("",False,(255,255,255))
+	message=myfont.render("",ANTIALIAS,(255,255,255))
 	action=put_a_tile(8,0,mx,my,False,3)
 	decal=2
 	done=False
@@ -309,7 +313,7 @@ def tutorial_loop(screen,clock):
 			pygame.draw.rect(screen, (0,0,0), ((gx,gy+ts*decal),(gx+gw,gy+gh)))
 			if(step==1*second):
 				message=myfont.render(\
-				"Press UP/DOWN to put a JUMP TILE",False,(255,255,255))
+				"Press UP/DOWN to put a JUMP TILE",ANTIALIAS,(255,255,255))
 			if(step<3.5*second):
 				(mx,my),uparrow,downarrow=action.__next__()
 			if(step==4*second):
@@ -325,7 +329,7 @@ def tutorial_loop(screen,clock):
 		if(act==1):			
 			if(step==half*4):
 				message=myfont.render(\
-				"You can't JUMP twice in a row!",False,(255,255,255))
+				"You can't JUMP twice in a row!",ANTIALIAS,(255,255,255))
 			if(step<half*12):
 				mx,my=action.__next__()
 				if(step%half==0):
@@ -341,10 +345,10 @@ def tutorial_loop(screen,clock):
 				action=put_a_tile(0,2,mx,my,False,2)
 			if(step==half):
 				message=myfont.render(\
-				"Avoid coliding with BLOCKS",False,(255,255,255)) #collect life vials
+				"Avoid coliding with BLOCKS",ANTIALIAS,(255,255,255)) #collect life vials
 			if(step==second*10):
 				message=myfont.render(\
-				"You have limited JUMP TILES during play",False,(255,255,255))
+				"You have limited JUMP TILES during play",ANTIALIAS,(255,255,255))
 			if(step==second*2):
 				action=put_a_tile(2,3,mx,my,False,1)
 			if(step==second*4):
@@ -360,17 +364,17 @@ def tutorial_loop(screen,clock):
 				decal=7
 			if(step==second*14):
 				message=myfont.render(\
-				"But before the LEVEL STARTS",False,(255,255,255))
+				"But before the LEVEL STARTS",ANTIALIAS,(255,255,255))
 			if(step==second*18):
 				message=myfont.render(\
-				"you will have INFINITE TILES",False,(255,255,255))
+				"you will have INFINITE TILES",ANTIALIAS,(255,255,255))
 				loader.jumpers=-1
 			#if(step==second*18):
 			#	message=myfont.render(\
-			#	"You will have UNLIMITED jumper tiles!",False,(255,255,255))
+			#	"You will have UNLIMITED jumper tiles!",ANTIALIAS,(255,255,255))
 			if(step==second*22):
 				message=myfont.render(\
-				"If you ever get stuck, press R",False,(255,255,255))
+				"If you ever get stuck, press R",ANTIALIAS,(255,255,255))
 
 			if(step%half==0):
 				loader.step()
@@ -393,20 +397,20 @@ def tutorial_loop(screen,clock):
 		if(act==3):
 			if(step==second*4):
 				message=myfont.render(\
-				"You have to reach the very bottom",False,(255,255,255))
+				"You have to reach the very bottom",ANTIALIAS,(255,255,255))
 			if(step==second*7):
 				message=myfont.render(\
-				"of the 7 floors to pass a level",False,(255,255,255))
+				"of the 7 floors to pass a level",ANTIALIAS,(255,255,255))
 			if(step==second*11):
 				message=myfont.render(\
-				"Good luck!",False,(255,255,255))
+				"Good luck!",ANTIALIAS,(255,255,255))
 				#message=myfont.render(\
-				#"You have 7 continues and 3 lives",False,(255,255,255))
+				#"You have 7 continues and 3 lives",ANTIALIAS,(255,255,255))
 				loader.life=3
 				loader.continues=7
 			if(step==second*15):
 				message=myfont.render(\
-				"Good luck!",False,(255,255,255))
+				"Good luck!",ANTIALIAS,(255,255,255))
 			if(step==second*16):
 				done=True
 			step+=1
@@ -454,9 +458,9 @@ def game_loop(screen,clock):
 				if(step==0):
 					loader._load(levels_list[current_level])
 					screen.fill((0,0,0))
-					screen.blit(myfont.render("Get ready", False, (255,255,255)	),(gw/2,gh/2))
-					screen.blit(myfont.render("You have 7+3 seconds with",False, (255,255,255)),(gw/2-ts*2,gh/2+ts))
-					screen.blit(myfont.render("unlimited jumpers",False, (255,255,255)),(gw/2-ts,gh/2+ts*2))
+					screen.blit(myfont.render("Get ready", ANTIALIAS, (255,255,255)	),(gw/2,gh/2))
+					screen.blit(myfont.render("You have 7+3 seconds with",ANTIALIAS, (255,255,255)),(gw/2-ts*2,gh/2+ts))
+					screen.blit(myfont.render("unlimited jumpers",ANTIALIAS, (255,255,255)),(gw/2-ts,gh/2+ts*2))
 					pygame.display.flip()
 				if(step<second*4):
 					clock.tick(second)
@@ -472,14 +476,14 @@ def game_loop(screen,clock):
 				loader.jumpers=-1
 				loader.life=0
 				curc=10
-				curter=myfont.render("G.0",False,(255,255,255))
+				curter=myfont.render("G.0",ANTIALIAS,(255,255,255))
 				#curc=10-step//60
 			if(step%second==0 and step!=0):
 				curc=10-(step//second)
 				if(curc>=0):
-					curter=myfont.render(str(curc),False,(255,255,255))
+					curter=myfont.render(str(curc),ANTIALIAS,(255,255,255))
 				else:
-					curter=myfont.render("Game",False,(255,255,255))
+					curter=myfont.render("Game",ANTIALIAS,(255,255,255))
 
 			yy=min(gy+gh,gy+gh-(ts*curc)+ts*3)
 			loader.life=min(3,max(0,3-curc))

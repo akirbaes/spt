@@ -130,7 +130,7 @@ class game_map:
 		self.life=3
 		self.maxdepth=0
 		self.jumpers=0
-		self.namesurf=myfont.render(self.level_name, False, (255,255,255))
+		self.namesurf=myfont.render(self.level_name, ANTIALIAS, (255,255,255))
 
 	def endofline(self):
 		return(self.px+self.pd>=self.width)or(self.px+self.pd<0)
@@ -231,7 +231,7 @@ class game_map:
 			screen.blit(scoretitle,(ww/2,ts))
 			screen.blit(boosttitle,(ts/2,4*ts))
 		
-			screen.blit(myfont.render(to_dodec(self.score), False, (255,255,255)),(ww-ts*5,gy-ts))
+			screen.blit(myfont.render(to_dodec(self.score), ANTIALIAS, (255,255,255)),(ww-ts*5,gy-ts))
 			screen.blit(self.namesurf,(ww-ts*5,0))
 
 
