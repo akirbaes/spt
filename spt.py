@@ -148,7 +148,8 @@ def puzzle_loop(screen,clock):
 	mark=pygame.image.load(os.path.join("graphics","marker.png"))
 	mark=pygame.transform.flip(mark,True,False)
 
-	names=["Back"]+[x.capitalize() for x in puzzle_list]
+	back = myfont.render("Back",False,(255,255,255))
+	names=[x.capitalize() for x in puzzle_list]
 	names=[myfont.render(msg,False,(255,255,255)) for msg in names]
 	quitmessage=font2.render("Press Q/ESC to return",False,(255,255,255))
 	startmessage=font2.render("Press SPACE to start",False,(255,255,255))
@@ -156,12 +157,13 @@ def puzzle_loop(screen,clock):
 	while not quit and not game:
 		if mode=="Menu":
 			screen.fill((0,0,0))
+			screen.blit(back,(ts/2,ts*2))
 			for i,msg in enumerate(names):
-				screen.blit(msg,(ts*4,ts*2+i*ts))
+				screen.blit(msg,(ts*4,ts/2+i*ts-current*8))
 			for i,star in enumerate(completion):
 				if star:
-					screen.blit(starsurf,(ts*3,ts*3+i*ts))
-			screen.blit(mark,(ts*2,ts*2+current*ts))
+					screen.blit(starsurf,(ts*3,ts*3+i*ts-current*8))
+			screen.blit(mark,(ts*2.5,ts/3+current*ts-current*8))
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					quit=True
@@ -175,11 +177,11 @@ def puzzle_loop(screen,clock):
 						game=True
 					
 					elif event.key==pygame.K_RIGHT or event.key==pygame.K_SPACE or event.key==pygame.K_KP_ENTER or event.key==pygame.K_RETURN:
-						if(current==0):
+						if(current==-1):
 							game=True
 						else:
 							mode="Puzzle"
-							loader._load(puzzle_list[current-1])
+							loader._load(puzzle_list[current])
 							loader.init_level()
 							loader.jumpers=-1 #for the initial frame
 							step=0

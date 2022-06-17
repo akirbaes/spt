@@ -9,8 +9,9 @@ gy=GAME_AREA_Y=TILESIZE*2
 gw=GAME_AREA_WIDTH=TILESIZE*11
 gh=GAME_AREA_HEIGHT=TILESIZE*7
 
-puzzle_list=["mazetown","breaktrough","catastrophe","annoyance","delivrance"]
-levels_list=["avoid","barrage","zigzag","recueil","vial","detour","maze","delivrancel"]
+puzzle_list=["mazetown","breaktrough","catastrophe","annoyance","delivrance2"]
+levels_list=["avoid","barrage","zigzag","recueil","vial","detour","maze","delivrance1"]
+puzzle_list=["avoid", "barrage","zigzag", "recueil", "vial", "detour","breaktrough", "mazetown","catastrophe","annoyance", "delivrance1","delivrance2"]
 second=60
 
 datafile=open(os.path.join("levels","test.rawdata"))
