@@ -150,7 +150,7 @@ class game_map:
 				colors=( (255,0,0),(255,255,0),(0,255,0),(0,255,255),(0,0,255),(255,0,255),(128,128,0) )
 				color=tuple(a*(jj+3)/14 for a in colors[i])
 				grey=((128,128,128),(100,100,100))[(i+j)%2]
-				if(i>=self.maxdepth and not self.level_end):
+				if(i>=self.maxdepth and not self.py==self.height):
 					color=grey
 				pygame.draw.rect(screen, color,        (gx+ts*j,  gy+ts*i,   ts, ts))
 				screen.blit(cadre, (gx+j*ts, gy+i*ts))
