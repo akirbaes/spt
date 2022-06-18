@@ -303,14 +303,14 @@ def tutorial_loop(screen,clock):
 			yield move.__next__(), up, down
 			if i==int(second/4):
 				loader.put(x,y,up)
-				loader.jumpers-=1
+				loader.jumpers=max(-1,loader.jumpers-1)
 		while True:
 			yield move.__next__(), 0,0
 	quit=False
 	loader=game_loader.game_map(1,screen)
 	loader._load("tutorial")
 	loader.init_level()
-	loader.jumpers=2
+	loader.jumpers=-1
 	step=0
 	act=0
 	skip=font2.render("Press ESC or any key to skip",ANTIALIAS,(255,255,255))
@@ -340,13 +340,14 @@ def tutorial_loop(screen,clock):
 				(mx,my),uparrow,downarrow=action.__next__()
 			if(step==4*second):
 				action=put_a_tile(8,1,mx,my,False,1)
-			if(4*second<step<second*5.5):
+			if(4*second<step<second*5+quarter):
 				(mx,my),uparrow,downarrow=action.__next__()
 			step+=1
 			if(step==6*second):
 				act=1
 				action=move_mouse_in(mx,my,ww+ts,my+ts*4,second)
 				step=0
+				loader.jumpers=0
 
 		if(act==1):			
 			if(step==half*4):
@@ -365,18 +366,26 @@ def tutorial_loop(screen,clock):
 		if(act==2):
 			if(step==0):
 				action=put_a_tile(0,2,mx,my,False,2)
-			if(step==half):
+			if(step==half+second):
 				message=myfont.render(\
 				"Avoid coliding with BLOCKS",ANTIALIAS,(255,255,255)) #collect life vials
 			if(step==second*10):
 				message=myfont.render(\
 				"You have limited JUMP TILES during play",ANTIALIAS,(255,255,255))
+
+			for repeat in range(9):
+				if(step==second*10+half+(half-eighth)*repeat-quarter):
+					if(repeat%2==0):
+						loader.jumpers=3
+					else:
+						loader.jumpers=0
+
 			if(step==second*2):
 				action=put_a_tile(2,3,mx,my,False,1)
 			if(step==second*4):
 				decal=6
 				action=put_a_tile(3,4,mx,my,False,1)
-			if(step==second*5):
+			if(step==second*6):
 				action=put_a_tile(6,5,mx,my,True,1)
 			if(step==second*7):
 				action=put_a_tile(7,4,mx,my,True,1)
@@ -384,17 +393,29 @@ def tutorial_loop(screen,clock):
 				action=move_mouse_in(mx,my,mx*2,my-ts,second)
 			if(step==second*9):
 				decal=7
+
+			# if(step==second*13+half):
+			# 	loader.jumpers=-2
+
 			if(step==second*14):
 				message=myfont.render(\
-				"But before the LEVEL STARTS",ANTIALIAS,(255,255,255))
+				"But you can place as many as you want",ANTIALIAS,(255,255,255))
+				loader.jumpers=-2
+			for repeat in range(9):
+				if(step==second*16+(half-eighth)*repeat-quarter):
+					if(repeat%2==0):
+						loader.jumpers=-1
+					else:
+						loader.jumpers = -2
+
 			if(step==second*18):
 				message=myfont.render(\
-				"you will have INFINITE TILES",ANTIALIAS,(255,255,255))
-				loader.jumpers=-1
+				"before the LEVEL STARTS",ANTIALIAS,(255,255,255))
 			#if(step==second*18):
 			#	message=myfont.render(\
 			#	"You will have UNLIMITED jumper tiles!",ANTIALIAS,(255,255,255))
 			if(step==second*22):
+				loader.jumpers=0
 				message=myfont.render(\
 				"If you ever get stuck, press R",ANTIALIAS,(255,255,255))
 
@@ -417,23 +438,23 @@ def tutorial_loop(screen,clock):
 			step+=1
 
 		if(act==3):
-			if(step==second*4):
+			if(step==second*2):
 				message=myfont.render(\
 				"You have to reach the very bottom",ANTIALIAS,(255,255,255))
-			if(step==second*7):
+			if(step==second*5):
 				message=myfont.render(\
 				"of the 7 floors to pass a level",ANTIALIAS,(255,255,255))
-			if(step==second*11):
+			if(step==second*9):
 				message=myfont.render(\
 				"Good luck!",ANTIALIAS,(255,255,255))
 				#message=myfont.render(\
 				#"You have 7 continues and 3 lives",ANTIALIAS,(255,255,255))
 				loader.life=3
 				loader.continues=7
-			if(step==second*15):
+			if(step==second*12):
 				message=myfont.render(\
 				"Good luck!",ANTIALIAS,(255,255,255))
-			if(step==second*16):
+			if(step==second*14):
 				done=True
 			step+=1
 		pygame.draw.rect(screen, (0,0,0), ((gx,gy+ts*decal),(gx+gw,gy+gh)))
@@ -460,7 +481,7 @@ def tutorial_loop(screen,clock):
 			elif event.type==pygame.KEYUP:
 				usual_time=second
 	return quit
-	
+
 def game_loop(screen,clock):
 	quit=False
 	game=False

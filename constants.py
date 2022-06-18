@@ -44,8 +44,8 @@ def lc():
 	return fat
 
 h=half=int(ceil(second/2))
-q=quarter=int(ceil(half/2))
-e=eighth=int(ceil(quarter/2))
+q=quarter=int(ceil(second/4))
+e=eighth=int(ceil(second/8))
 
 FONTSIZE=ts
 pygame.font.init()
