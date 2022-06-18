@@ -1,4 +1,6 @@
 #! python
+from math import floor
+
 import pygame
 import os
 import game_system as game_loader
@@ -369,12 +371,22 @@ def tutorial_loop(screen,clock):
 			if(step==half+second):
 				message=myfont.render(\
 				"Avoid coliding with BLOCKS",ANTIALIAS,(255,255,255)) #collect life vials
-			if(step==second*10):
+
+			#if(step==second*9+quarter):
+			#	loader.jumpers=3
+
+			if(step==second*9+quarter):
 				message=myfont.render(\
 				"You have limited JUMP TILES during play",ANTIALIAS,(255,255,255))
 
-			for repeat in range(9):
-				if(step==second*10+half+(half-eighth)*repeat-quarter):
+			for repeat in range(6):
+				if(step==second*9+(half-eighth)*repeat+quarter):
+					if(repeat%2==0):
+						loader.jumpers=0
+					else:
+						loader.jumpers=-2
+			for repeat in range(5):
+				if(step==second*9+(half-eighth)*(repeat+6)+quarter):
 					if(repeat%2==0):
 						loader.jumpers=3
 					else:
@@ -392,7 +404,7 @@ def tutorial_loop(screen,clock):
 			if(step==second*8):
 				action=move_mouse_in(mx,my,mx*2,my-ts,second)
 			if(step==second*9):
-				decal=7
+				decal=6.1
 
 			# if(step==second*13+half):
 			# 	loader.jumpers=-2
@@ -402,7 +414,7 @@ def tutorial_loop(screen,clock):
 				"But you can place as many as you want",ANTIALIAS,(255,255,255))
 				loader.jumpers=-2
 			for repeat in range(9):
-				if(step==second*16+(half-eighth)*repeat-quarter):
+				if(step==second*14+(half-eighth)*repeat+quarter):
 					if(repeat%2==0):
 						loader.jumpers=-1
 					else:
@@ -441,6 +453,8 @@ def tutorial_loop(screen,clock):
 			if(step==second*2):
 				message=myfont.render(\
 				"You have to reach the very bottom",ANTIALIAS,(255,255,255))
+			if(step==second*2+quarter):
+				decal=7
 			if(step==second*5):
 				message=myfont.render(\
 				"of the 7 floors to pass a level",ANTIALIAS,(255,255,255))
@@ -457,8 +471,8 @@ def tutorial_loop(screen,clock):
 			if(step==second*14):
 				done=True
 			step+=1
-		pygame.draw.rect(screen, (0,0,0), ((gx,gy+ts*decal),(gx+gw,gy+gh)))
-		if(decal<7):
+		pygame.draw.rect(screen, (0,0,0), ((gx,gy+ts*int(decal)),(gx+gw,gy+gh)))
+		if(decal<=6):
 			screen.blit(keyup[uparrow],(gx+ts/2,gy+gh-ts*2.5))
 			screen.blit(keydown[downarrow],(gx+ts/2,gy+gh-ts*1.5))
 			screen.blit(mouse,(mx,my))
