@@ -7,6 +7,23 @@ from sprites_load import lifevial, timer, vial
 
 unlocked=True
 
+def event_menu(event):
+	if (event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN) \
+			or (event.type == pygame.MOUSEWHEEL and event.y < 0):
+		return "down"
+	elif (event.type == pygame.KEYDOWN and event.key == pygame.K_UP) \
+			or (event.type == pygame.MOUSEWHEEL and event.y > 0):
+		return "up"
+	elif event.type == pygame.KEYDOWN and \
+			(
+					event.key == pygame.K_RIGHT or event.key == pygame.K_SPACE or event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN) \
+			or event.type == pygame.MOUSEWHEEL and event.x > 0:
+		return "enter"
+	elif event.type == pygame.KEYDOWN and \
+			(event.key == pygame.K_q or event.key == pygame.K_LEFT or event.key == pygame.K_ESCAPE) \
+			or event.type == pygame.MOUSEWHEEL and event.x < 0:
+		return "back"
+	return ""
 
 def menu_loop(screen,clock):
 	quit=False
@@ -39,18 +56,18 @@ def menu_loop(screen,clock):
 			screen.blit(msg,(gx+ts,gy+4*ts+i*ts))
 
 		for event in pygame.event.get():
+			event_action = event_menu(event)
 			if event.type == pygame.QUIT:
 				quit=True
-			elif event.type==pygame.KEYDOWN:
-				if event.key==pygame.K_DOWN:
-					current=min(3,current+1)
-				elif event.key==pygame.K_UP:
-					current=max(-bool(unlocked),current-1)
-				elif event.key==pygame.K_RIGHT or event.key==pygame.K_SPACE or event.key==pygame.K_KP_ENTER  or event.key==pygame.K_RETURN:
-					if(current==2):
-						quit=True
-					else:
-						game=True
+			elif event_action=="down":
+				current=min(3,current+1)
+			elif event_action=="up":
+				current=max(-bool(unlocked),current-1)
+			elif event_action=="enter":
+				if(current==2):
+					quit=True
+				else:
+					game=True
 			elif event.type==pygame.KEYUP:
 				pass #TODO
 		step+=1
@@ -117,12 +134,15 @@ def character_loop(screen,clock):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				quit=True
-			elif event.type==pygame.KEYDOWN:
-				if event.key==pygame.K_DOWN:
-					cursor=min(MAXCHOICE,cursor+1)
-				elif event.key==pygame.K_UP:
+			elif (event.type==pygame.KEYDOWN and event.key==pygame.K_DOWN)\
+				or (event.type == pygame.MOUSEWHEEL and event.y<0):
+				cursor=min(MAXCHOICE,cursor+1)
+			elif (event.type==pygame.KEYDOWN and event.key==pygame.K_UP)\
+				or (event.type == pygame.MOUSEWHEEL and event.y>0):
 					cursor=max(0,cursor-1)
-				elif event.key==pygame.K_RIGHT or event.key==pygame.K_SPACE or event.key==pygame.K_KP_ENTER  or event.key==pygame.K_RETURN:
+			elif event.type == pygame.KEYDOWN and \
+			(event.key==pygame.K_RIGHT or event.key==pygame.K_SPACE or event.key==pygame.K_KP_ENTER  or event.key==pygame.K_RETURN)\
+			or event.type == pygame.MOUSEWHEEL and event.x>0:
 					if(cursor==2):
 						ret=True
 					else:
@@ -132,8 +152,11 @@ def character_loop(screen,clock):
 						if((cursor == fat) or cursor==0):
 							sc(cursor)
 							current=cursor
-				elif event.key == pygame.K_q or event.key==pygame.K_LEFT or event.key == pygame.K_ESCAPE :
-					ret=True
+
+			elif event.type == pygame.KEYDOWN and \
+			(event.key == pygame.K_q or event.key==pygame.K_LEFT or event.key == pygame.K_ESCAPE)\
+			or event.type == pygame.MOUSEWHEEL and event.x<0:
+				ret=True
 		screen.blit(font2.render("Current character : "+cn[current],ANTIALIAS,(255,255,255)),(ts/2,ts/2))
 		pygame.display.flip()
 		clock.tick(60)
@@ -171,16 +194,16 @@ def puzzle_loop(screen,clock):
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					quit=True
-				elif event.type==pygame.KEYDOWN:
-					if event.key == pygame.K_UP:
+				else:
+					event_action = event_menu(event)
+					if event_action=="up":
 						current=max(0,current-1)
-					elif event.key == pygame.K_DOWN:
+					elif event_action=="down":
 						current=min(len(names)-1,current+1)
-					elif event.key == pygame.K_q or event.key==pygame.K_LEFT\
-						or event.key == pygame.K_ESCAPE :
+					elif event_action=="back":
 						game=True
 					
-					elif event.key==pygame.K_RIGHT or event.key==pygame.K_SPACE or event.key==pygame.K_KP_ENTER or event.key==pygame.K_RETURN:
+					elif event_action=="enter":
 						if(current==-1):
 							game=True
 						else:
@@ -202,16 +225,15 @@ def puzzle_loop(screen,clock):
 			step+=1
 
 			for event in pygame.event.get():
+				event_action = event_menu(event)
 				if event.type == pygame.QUIT:
 					quit=True
+				elif event_action=="up":
+					loader.put_jumper(True)
+				elif event_action=="down":
+					loader.put_jumper(False)
 				elif event.type==pygame.KEYDOWN:
-					if event.key == pygame.K_UP:
-						#if(loader.jumpers>0):
-						loader.put_jumper(True)
-					elif event.key == pygame.K_DOWN:
-						#if(loader.jumpers>0):
-						loader.put_jumper(False)
-					elif event.key == pygame.K_r :
+					if event.key == pygame.K_r :
 						loader.init_level()
 					elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE :
 						mode="Menu"
