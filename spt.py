@@ -25,6 +25,10 @@ def event_menu(event):
 			(event.key == pygame.K_q or event.key == pygame.K_LEFT or event.key == pygame.K_ESCAPE) \
 			or event.type == pygame.MOUSEWHEEL and event.x < 0:
 		return "back"
+	elif  event.type==pygame.KEYDOWN and event.key == pygame.K_r:
+		return "retry"
+	elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+		return "mouseright"
 	return ""
 
 def menu_loop(screen,clock):
@@ -182,6 +186,7 @@ def puzzle_loop(screen,clock):
 	startmessage=font2.render("Press SPACE to start      ",ANTIALIAS,(255,255,255))
 	step=0
 	while not quit and not game:
+		game_time = 60
 		if mode=="Menu":
 			screen.fill((0,0,0))
 			screen.blit(back,(ts/2,ts*2))
@@ -234,21 +239,23 @@ def puzzle_loop(screen,clock):
 					loader.put_jumper(True)
 				elif event_action=="down":
 					loader.put_jumper(False)
-				elif event.type==pygame.KEYDOWN:
-					if event.key == pygame.K_r :
-						loader.init_level()
-					elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE :
-						mode="Menu"
-					elif event.key==pygame.K_SPACE or event.key==pygame.K_KP_ENTER  or event.key==pygame.K_RETURN:
-						mode="Play"
-						loader.jumpers=0
-						step=0
+				elif event_action=="retry":
+					loader.init_level()
+				elif event_action=="back":
+					mode="Menu"
+				elif event_action=="enter":
+					mode="Play"
+					loader.jumpers=0
+					step=0
 				elif event.type==pygame.KEYUP:
 					pass #TODO
 			
 		elif mode=="Play":
 			loader.draw(screen)
 			if(loader.level_end):
+				for event in pygame.event.get(): pass
+				if pygame.mouse.get_pressed()[2] or pygame.key.get_pressed()[pygame.K_RSHIFT] or pygame.key.get_pressed()[pygame.K_LSHIFT]:
+					game_time *= 4
 				if(len(loader.animslist)==0):
 					if(loader.has_lost()):
 						loader.init_level()
@@ -264,29 +271,30 @@ def puzzle_loop(screen,clock):
 			
 
 				for event in pygame.event.get():
+					event_action=event_menu(event)
 					if event.type == pygame.QUIT:
 						quit=True
-					elif event.type==pygame.KEYDOWN:
-						if event.key == pygame.K_UP:
-							if(loader.jumpers>0):
-								if(loader.put_jumper(True)):
-									loader.jumpers-=1
-						elif event.key == pygame.K_DOWN:
-							if(loader.jumpers>0):
-								if(loader.put_jumper(False)):
-									loader.jumpers-=1
-						elif event.key == pygame.K_r:
+					if event_action=="up":
+						if(loader.jumpers>0):
+							if(loader.put_jumper(True)):
+								loader.jumpers-=1
+					elif event_action=="down":
+						if(loader.jumpers>0):
+							if(loader.put_jumper(False)):
+								loader.jumpers-=1
+					elif event_action=="retry":
 							loader.kill()
-						elif event.key==pygame.K_SPACE:
-							loader.init_level()
-							mode="Puzzle"
-							step=0
+					elif event_action=="back":
+						loader.init_level()
+						mode="Puzzle"
+						step=0
 					elif event.type==pygame.KEYUP:
 						pass #TODO
-		
 
+				if pygame.mouse.get_pressed()[2] or pygame.key.get_pressed()[pygame.K_RSHIFT] or pygame.key.get_pressed()[pygame.K_LSHIFT]:
+					game_time *= 4
 		pygame.display.flip()
-		clock.tick(60)
+		clock.tick(game_time)
 	return quit
 
 def tutorial_loop(screen,clock):
@@ -494,6 +502,11 @@ def tutorial_loop(screen,clock):
 					done=True
 			elif event.type==pygame.KEYUP:
 				usual_time=second
+			elif event.type==pygame.MOUSEBUTTONDOWN:
+				usual_time=second*4
+			elif event.type==pygame.MOUSEBUTTONUP:
+				usual_time=second
+
 	return quit
 
 def game_loop(screen,clock):
@@ -554,22 +567,19 @@ def game_loop(screen,clock):
 			clock.tick(second)
 
 			for event in pygame.event.get():
+				event_action = event_menu(event)
 				if event.type == pygame.QUIT:
 					quit=True
-				elif event.type==pygame.KEYDOWN:
-					if event.key == pygame.K_UP:
-						#if(loader.jumpers>0):
-						loader.put_jumper(True,10-curc)
-					elif event.key == pygame.K_DOWN:
-						#if(loader.jumpers>0):
-						loader.put_jumper(False,10-curc)
-					elif event.key == pygame.K_ESCAPE:
-						game=True
-						loader.continues=0
-						loader.level_end=True
-						loader.life=0
-				elif event.type==pygame.KEYUP:
-					pass #TODO
+				if(event_action=="up"):
+					loader.put_jumper(True,10-curc)
+				elif(event_action=="down"):
+					loader.put_jumper(False,10-curc)
+				elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+					game=True
+					loader.continues=0
+					loader.level_end=True
+					loader.life=0
+
 
 			
 			step+=1
